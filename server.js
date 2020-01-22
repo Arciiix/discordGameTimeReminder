@@ -114,7 +114,7 @@ function fetch()
             }
             else if (game.toLowerCase() === 'terraria' && isPlaying)
             {
-                secondsOfPlaying ++;
+                secondsOfPlaying += 10;
                 switch(secondsOfPlaying)
                 {
                     case 60:
