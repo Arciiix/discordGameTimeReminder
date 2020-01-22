@@ -1,6 +1,7 @@
 const options = 
 {
-    'prefix': '/'
+    'prefix': '/',
+    'timeout': 10000
 }
 
 
@@ -69,7 +70,7 @@ function lookForUserNickname(message, args)
 
 function startLooking()
 {
-    setInterval(fetch, 1000);
+    setInterval(fetch, options.timeout);
 
 }
 
