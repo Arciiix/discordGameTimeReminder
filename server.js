@@ -68,7 +68,7 @@ function lookForUserNickname(message, args)
 function startLooking()
 {
     setInterval(fetch, options.timeout);
-    console.log(`Started at ${guild.name} at channel ${data.channel.name}`);
+    console.log(`Started at ${guild.name} at channel ${channel.name}`);
 }
 
 function fetch()
