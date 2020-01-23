@@ -82,11 +82,11 @@ function fetch()
 
         if(!isOnline && data.presence.status === "online")
         {
-        channel.send("@everyone, O! Grzegorz aktywny, zobaczymy za ile zagra w Terrarie :thinking:");
+        channel.send("@pilnujemyGrzegorza, O! Grzegorz aktywny, zobaczymy za ile zagra w Terrarie :thinking:");
         isOnline = true;
         } else if(isOnline && data.presence.status !== "online")
         {
-            channel.send("@everyone, Cooo, Grzegorz nieaktywny? Co się stało? :thinking:");
+            channel.send("@pilnujemyGrzegorza, Cooo, Grzegorz nieaktywny? Co się stało? :thinking:");
             isOnline = false;
         }
 
@@ -109,7 +109,7 @@ function fetch()
             }
             else if(game.toLowerCase() !== 'terraria' && game.toLowerCase() !== "brak" && !isDifferentGame)
             {
-                channel.send("@everyone, Grześ nie gra w Terrarie :hushed:! jak to się stało? Ale i tak w nią później zagra :wink:");
+                channel.send("@pilnujemyGrzegorza, Grześ nie gra w Terrarie :hushed:! jak to się stało? Ale i tak w nią później zagra :wink:");
                 isDifferentGame = true;
             }
             else if (game.toLowerCase() === 'terraria' && isPlaying)
@@ -118,37 +118,37 @@ function fetch()
                 switch(secondsOfPlaying)
                 {
                     case 60:
-                        channel.send(`@everyone, Ojojoj, zaczyna się, już minuta Grześ!   :rofl:`);
+                        channel.send(`@pilnujemyGrzegorza, Ojojoj, zaczyna się, już minuta Grześ!   :rofl:`);
                         break;
                     case 900:
-                        channel.send(`@everyone, Grześ, już 25% godziny przegrałeś!`);
+                        channel.send(`@pilnujemyGrzegorza, Grześ, już 25% godziny przegrałeś!`);
                         break;
                     case 1800:
-                        channel.send(`@everyone, Grzegorz! Już połowa godziny za tobą!`);
+                        channel.send(`@pilnujemyGrzegorza, Grzegorz! Już połowa godziny za tobą!`);
                         break;
                     case 3600:
-                        channel.send(`@everyone, Dobra, Grześ, co prawda już godzina ale to nie jest tak dużo jak zawasze!  :laughing: `);
+                        channel.send(`@pilnujemyGrzegorza, Dobra, Grześ, co prawda już godzina ale to nie jest tak dużo jak zawasze!  :laughing: `);
                         break;
                     case 5400:
-                        channel.send("@everyone, Już 1,5 godziny zmarnowałeś, no cóż XD");
+                        channel.send("@pilnujemyGrzegorza, Już 1,5 godziny zmarnowałeś, no cóż XD");
                         break;
                     case 7200:
-                        channel.send(`@everyone, Już 2 godziny! Grześ, kończ powoli!  :rage: `);
+                        channel.send(`@pilnujemyGrzegorza, Już 2 godziny! Grześ, kończ powoli!  :rage: `);
                         break;
                     case 10800:
-                        channel.send(`@everyone, GRZEŚ! 3 GODZINY! ZRÓB SE PRZERWE!   :tired_face: `);
+                        channel.send(`@pilnujemyGrzegorza, GRZEŚ! 3 GODZINY! ZRÓB SE PRZERWE!   :tired_face: `);
                         break;
                     case 14400:
-                        channel.send("@everyone, 4 godziny, Grześ, to już przesada!");
+                        channel.send("@pilnujemyGrzegorza, 4 godziny, Grześ, to już przesada!");
                         break;
                     case 18000:
-                        channel.send("@everyone, 5 godzin, chyba zwariowałeś, wyłązczaj ten komputer!");
+                        channel.send("@pilnujemyGrzegorza, 5 godzin, chyba zwariowałeś, wyłązczaj ten komputer!");
                         break;
                     case 21600:
-                        channel.send("@everyone, 6 godzin, czy on tam jeszcze żyje?   :thinking: :scream: ");
+                        channel.send("@pilnujemyGrzegorza, 6 godzin, czy on tam jeszcze żyje?   :thinking: :scream: ");
                         break;
                     case 28800:
-                        channel.send("@everyone, 8 godzin, chyba już Grzegorza nie zobaczymy nigdy na oczy   :cry: ");
+                        channel.send("@pilnujemyGrzegorza, 8 godzin, chyba już Grzegorza nie zobaczymy nigdy na oczy   :cry: ");
 
                 }
 
@@ -163,12 +163,12 @@ function playingStatusChange(playing)
 {
     if(playing)
     {
-        channel.send(`@everyone, Grzegorz zaczął grać w Terrarie!  :heart_eyes:`);
+        channel.send(`@pilnujemyGrzegorza, Grzegorz zaczął grać w Terrarie!  :heart_eyes:`);
         isPlaying = true;
     }
     else
     {
-    channel.send(`@everyone, Grzegorz już nie gra w Terrarie! Grał od ${parseTime()}  :hushed: `);
+    channel.send(`@pilnujemyGrzegorza, Grzegorz już nie gra w Terrarie! Grał od ${parseTime()}  :hushed: `);
     secondsOfPlaying = 0;
     isPlaying = false;
     }
