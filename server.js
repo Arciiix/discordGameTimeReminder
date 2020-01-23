@@ -29,8 +29,6 @@ app.on('ready', () =>
 app.on('message', data =>
 {
 
-
-    
   let args = data.content.split(' ');
 
   if(data.content.includes(options.prefix))
@@ -60,18 +58,17 @@ function lookForUserNickname(message, args)
  {
     memberID = member.id;
     guild = message.guild;
+    channel = message.channel;
+
+    startLooking();
  }
-
- channel = message.channel;
-
- startLooking();
 
 }
 
 function startLooking()
 {
     setInterval(fetch, options.timeout);
-
+    console.log(`Started at ${guild.name} at channel ${data.channel.name}`);
 }
 
 function fetch()
