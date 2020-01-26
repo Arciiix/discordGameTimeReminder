@@ -11,7 +11,9 @@ const app = new Discord.Client();
 
 const token = require('./secret.js');
 
-let guild, member, memberID, game, channel, wantedGame, nickname;
+let guild, member, memberID, game, channel, nickname;
+
+let currentGame = 'brak';
 
 let interval;
 
@@ -21,11 +23,9 @@ let isOnline = false;
 
 let isPlaying = false;
 
-let isDifferentGame = false;
-
 app.on('ready', () =>
 {
- app.user.setActivity("Monitoruje Grzegorza");
+ app.user.setActivity("Pilnuje Grzegorza");
 })
 
 app.on('message', data =>
@@ -58,31 +58,16 @@ function lookForUserNickname(message)
  if(!member)
  {
      message.reply('Nie oznaczyłeś nikogo!');
-     message.reply("Pamiętaj o składni - /pilnuj <użytkownik> <gra>");
+     message.reply("Pamiętaj o składni - /pilnuj <użytkownik>");
  }
  else
  {
-     nickname = member.username;
-
-     //An array with a message, we're deleting first 2 elements to get a game name
-     let array = message.content.split(" ");
-     array.splice(0, 2);
-     let wantedGameArray = array.map(elem => elem.charAt(0).toUpperCase() + elem.slice(1).toLowerCase());
-     wantedGame = wantedGameArray.join(" ");
-     if(wantedGame != '')
-     {
-        memberID = member.id;
-        guild = message.guild;
-        channel = message.channel;
-        startLooking();
-        message.reply(`Zaczynam pilnować ${nickname}!`);
-     }
-     else
-     {
-         message.reply('Nie podałeś gry!');
-         message.reply("Pamiętaj o składni - /pilnuj <użytkownik> <gra>");
-     }
-
+    nickname = member.username;
+    memberID = member.id;
+    guild = message.guild;
+    channel = message.channel;
+    startLooking();
+    message.reply(`Zaczynam pilnować ${nickname}!`);
  }
 
 }
@@ -90,7 +75,7 @@ function lookForUserNickname(message)
 function startLooking()
 {
     interval = setInterval(fetch, options.timeout);
-    console.log(`Started at ${guild.name} at channel ${channel.name} with game ${wantedGame} at user ${nickname}`);
+    console.log(`Started at ${guild.name} at channel ${channel.name} at user ${nickname}`);
 }
 
 function fetch()
@@ -101,7 +86,7 @@ function fetch()
 
         if(!isOnline && data.presence.status === "online")
         {
-        channel.send(`O! ${nickname} aktywny, zobaczymy za ile zagra w ${wantedGame} :thinking:`);
+        channel.send(`O! ${nickname} aktywny, zobaczymy za ile zagra :thinking:`);
         isOnline = true;
         } else if(isOnline && data.presence.status !== "online")
         {
@@ -118,20 +103,20 @@ function fetch()
              game = data.presence.game.name;
             }
 
-            if(game.toLowerCase() !== wantedGame.toLowerCase() && isPlaying)
+            if(game.toLowerCase() == 'brak' && isPlaying)
             {
                 playingStatusChange(false);
-            } else if (game.toLowerCase() === wantedGame.toLowerCase() && !isPlaying)
+                channel.send(`${nickname} nie gra w gre! Ale i tak w nią później zagra :wink:`);
+            } else if (game.toLowerCase() !== 'brak' && !isPlaying)
             {
+                currentGame = game.toLowerCase();
+                let array = currentGame.split(" ");
+                let gameArray = array.map(elem => elem.charAt(0).toUpperCase() + elem.slice(1).toLowerCase());
+                currentGame = gameArray.join(" ");
                 playingStatusChange(true);
-                isDifferentGame = false;
+
             }
-            else if(game.toLowerCase() !== wantedGame.toLowerCase() && game.toLowerCase() !== "brak" && !isDifferentGame)
-            {
-                channel.send(`${nickname} nie gra w gre ${wantedGame} :hushed:! jak to się stało? Ale i tak w nią później zagra :wink:`);
-                isDifferentGame = true;
-            }
-            else if (game.toLowerCase() === wantedGame.toLowerCase() && isPlaying)
+            else if (game.toLowerCase() == currentGame.toLowerCase() && isPlaying)
             {
                 secondsOfPlaying += 10;
                 switch(secondsOfPlaying)
@@ -173,6 +158,13 @@ function fetch()
 
 
             }
+            else if (game.toLowerCase() != currentGame && isPlaying)
+            {
+                playingStatusChange(false);
+                channel.send(`${nickname} nie gra w gre! Ale i tak w nią później zagra :wink:`);
+                currentGame = false;
+                isPlaying = false;
+            }
 
         });
 
@@ -182,14 +174,16 @@ function playingStatusChange(playing)
 {
     if(playing)
     {
-        channel.send(`${nickname} zaczął grać w ${wantedGame}!  :heart_eyes:`);
+        secondsOfPlaying = 0;
+        channel.send(`${nickname} zaczął grać w ${currentGame}!  :heart_eyes:`);
         isPlaying = true;
     }
     else
     {
-    channel.send(`${nickname} już nie gra w ${wantedGame}! Grał od ${parseTime()}  :hushed: `);
+    channel.send(`${nickname} już nie gra w ${currentGame}! Grał od ${parseTime()}  :hushed: `);
     secondsOfPlaying = 0;
     isPlaying = false;
+    currentGame = '';
     }
 }
 
@@ -220,11 +214,11 @@ function parseTime()
 
 function reset()
 {
-    guild = member = memberID = game = channel = wantedGame = nickname = undefined;
+    guild = member = memberID = game = channel = nickname = undefined;
+    currentGame = '';
     secondsOfPlaying = 0;
     isOnline = false;
     isPlaying = false;
-    isDifferentGame = false;
     clearInterval(interval);
     console.log("Reseted!");
 }
