@@ -1,7 +1,9 @@
 const options = 
 {
     'prefix': '/',
-    'timeout': 10000
+    'timeout': 10000,
+    'nightHour': 21,
+    'nightEndHour': 10
 }
 
 
@@ -23,9 +25,12 @@ let isOnline = false;
 
 let isPlaying = false;
 
+let isNight = false;
+
 app.on('ready', () =>
 {
  app.user.setActivity("Pilnuje Grzegorza");
+ console.log("Connected to discord");
 })
 
 app.on('message', data =>
@@ -223,4 +228,39 @@ function reset()
     console.log("Reseted!");
 }
 
+function turnOffForNight()
+{
+let date = new Date();
+if(date.getHours() === options.nightHour && !isNight && channel)
+{
+    //Turning off the bot for night and resetings "current" game variables, such a time of playing, but not user info such a memberid.
+    //Check is user playing
+    if(isPlaying)
+    {
+        channel.send(`${nickname} już nie gra w ${currentGame}! Grał od ${parseTime()}  :hushed: `);
+    }
+    channel.send("Wyłączono na noc!");
+    isNight = true;
+    secondsOfPlaying = 0;
+    isOnline = false;
+    isPlaying = false;
+    currentGame = '';
+    clearInterval(interval);
+    console.log("Turned off for night");
+    app.destroy();
+
+}
+else if(date.getHours() === options.nightEndHour && isNight && channel)
+{
+    //Reconnecting the bot
+    isNight = false;
+    interval = setInterval(fetch, options.timeout);
+    console.log("Turned on after night");
+    app.login(token)
+    .then(() => channel.send("Włączono bota ponownie!"));
+}
+}
+
 app.login(token);
+
+let nightInterval = setInterval(turnOffForNight, 60000);
